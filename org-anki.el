@@ -638,11 +638,11 @@ This is a best-effort command which doesn't support all of Anki's features. Its 
            ((equal type "NameDescr")
             `( ,(cdr (assoc 'value (cdr (assoc 'Name  fields))))
              . ,(cdr (assoc 'value (cdr (assoc 'Descr fields))))))
-           ((equal type "Basic")
+           ((member type '("Basic" "Basic (and reversed card)" "Basic (optional reversed card)"))
             `( ,(cdr (assoc 'value (cdr (assoc 'Front  fields))))
                . ,(cdr (assoc 'value (cdr (assoc 'Back   fields))))))
            (t
-            org-anki--report-error "Unsupported note type: %s" type))))
+            (org-anki--report-error "Unsupported note type: %s" type)))))
 
     (make-org-anki--note
      :maybe-id (field 'noteId)
@@ -651,8 +651,7 @@ This is a best-effort command which doesn't support all of Anki's features. Its 
      :tags     (append (field 'tags) nil)
      ;; :deck     deck
      :type     type
-     :point    nil)
-    )))
+     :point    nil))))
 
 (defun org-anki--write-note (note)
   ;; Add title
